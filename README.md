@@ -17,3 +17,4 @@ However, regardless if you choose to credit me for this fork or not, per the ori
 ## Credits
 * [Jem Turner](https://www.jemjabella.co.uk/) - The original author of [BellaBuffs](https://www.jemjabella.co.uk/scripts/bellabuffs/).
 * [InfinityFree](https://www.infinityfree.com/) for their [PHPMailer contact form script](https://github.com/PHPMailer/PHPMailer).
+* [PHPMailer](https://github.com/PHPMailer/PHPMailer)
