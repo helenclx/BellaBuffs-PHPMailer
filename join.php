@@ -1,6 +1,8 @@
 <?php
 $show_form = true;
 $error_msg = NULL;
+require_once __DIR__.'/contactform/vendor/autoload.php';
+require_once __DIR__.'/contactform/config.php';
 
 if (isset($_POST['submit'])) {
 	require_once('prefs.php');
@@ -31,10 +33,10 @@ if (isset($_POST['submit'])) {
 
 	if (isBot() !== false)
 		$error_msg .= "No bots please! UA reported as: ".$_SERVER['HTTP_USER_AGENT'] . "\r\n";
-	
+
 	if (substr_count($_POST['comments'], 'http://') > 1)
 		$error_msg .= "Too many URLs; we've assumed you're spam and 'lost' your application. Please try again without any extra URLs if you're a geniune person :)\r\n";
-	
+
 	$exploits = "/(content-type|bcc:|cc:|document.cookie|onclick|onload|javascript|alert)/i";
 	if (filesize(SPAMWDS) > 0) $spamlist = file(SPAMWDS);
 
@@ -53,7 +55,7 @@ if (isset($_POST['submit'])) {
 			$error_msg .= "No HTML, please.\r\n";
 
 		$clean[$key] = cleanUp($val);
-	} 
+	}
 
 	// set default values for empty/unset fields
 	if (empty($clean['dispemail']))
@@ -77,11 +79,11 @@ if (isset($_POST['submit'])) {
 		$error_msg .= "The website url you provided is not valid. Please remove and try again or fix the URL.\r\n";
 	if ($clean['country'] == "null" || (filesize(COUNTRIES) > 0 && checkTXTfile(COUNTRIES, $clean['country'], "country") === false))
 		$error_msg .= "Please select a valid country. \r\n";
-	
+
 	if (filesize(IPBLOCKLST) > 0 && checkTXTfile(IPBLOCKLST, $_SERVER['REMOTE_ADDR'], "ip") === true) {
 		echo "<p>Your IP is in the block list, that means you're not allowed to join at this time. \r\n</p>";
 		exit(include('footer.php'));
-	} 
+	}
 	if (filesize(NEWBIES) > 0 && checkTXTfile(NEWBIES, breakEmail($clean['email']), "email") === true) {
 		echo "<p>You're already in the pending queue, you can't join twice!</p> \n";
 		exit(include('footer.php'));
@@ -98,55 +100,66 @@ if (isset($_POST['submit'])) {
 		$clean['email'] = breakEmail(strtolower($clean['email']));
 
 		// send off some emails
+		$mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+		// Server settings
+		$mail->setLanguage(CONTACTFORM_LANGUAGE);
+		$mail->SMTPDebug = CONTACTFORM_PHPMAILER_DEBUG_LEVEL;
+		$mail->isSMTP();
+		$mail->Host = CONTACTFORM_SMTP_HOSTNAME;
+		$mail->SMTPAuth = true;
+		$mail->Username = CONTACTFORM_SMTP_USERNAME;
+		$mail->Password = CONTACTFORM_SMTP_PASSWORD;
+		$mail->SMTPSecure = CONTACTFORM_SMTP_ENCRYPTION;
+		$mail->Port = CONTACTFORM_SMTP_PORT;
+		$mail->CharSet = CONTACTFORM_MAIL_CHARSET;
+		$mail->Encoding = CONTACTFORM_MAIL_ENCODING;
+
 		if ($emailnewbies == "yes") {
-			$subject = "Thank you for joining $title";
+			// Recipients
+			$mail->setFrom($admin_email, $title);
+			$mail->addAddress(fixEmail($clean['email']), $clean['name']);
+			$mail->addReplyTo($admin_email);
 
-			$message  = $thanksjoinMsg;
-			$message .= "Name: {$clean['name']} \n";
-			$message .= "Email: " . fixEmail($clean['email']) . " \n";
-			$message .= "URL: {$clean['url']} \n";
-			$message .= "Country: {$clean['country']} \n";
+			// Content
+			$mail->Subject = "Thank you for joining $title";
+			$mail->Body  = $thanksjoinMsg . "\n\n";
+			$mail->Body .= "== Your Details == \n";
+			$mail->Body .= "Name: {$clean['name']} \n";
+			$mail->Body .= "Email: " . fixEmail($clean['email']) . " \n";
+			$mail->Body .= "URL: {$clean['url']} \n";
+			$mail->Body .= "Country: {$clean['country']} \n";
 			if (isset($favefield) && $favefield == "yes") {
-				$message .= "$favetext: {$clean['fave']} \n";
+				$mail->Body .= "$favetext: {$clean['fave']} \n";
 			}
-			$message .= "Comments: {$clean['comments']} \n\n";
+			$mail->Body .= "Comments: {$clean['comments']} \n\n";
 
-			if (strstr($_SERVER['SERVER_SOFTWARE'], "Win")) {
-				$headers   = "From: $admin_email \n";
-				$headers  .= "Reply-To: $admin_email";
-			} else {
-				$headers   = "From: $title <$admin_email> \n";
-				$headers  .= "Reply-To: <$admin_email>";
-			}
-
-			mail(fixEmail($clean['email']),$subject,$message,$headers);
+			$mail->send();
 		}
+
 		if ($emailadmin == "yes") {
-			$subject = "New member at $title";
+			// Remove previous recipients
+			$mail->ClearAllRecipients();
 
-			$message  = "There's a new member at your $FLsubject fanlisting with the following details: \n\n";
+			$mail->setFrom($admin_email, $title);
+			$mail->addAddress($admin_email, $admin_name);
 
-			$message .= "Name: {$clean['name']} \n";
-			$message .= "Email: " . fixEmail($clean['email']) . " \n";
-			$message .= "URL: {$clean['url']} \n";
-			$message .= "Country: {$clean['country']} \n";
+			$mail->Subject = "New member at $title";
+
+			$mail->Body  = "There's a new member at your $FLsubject fanlisting with the following details: \n\n";
+
+			$mail->Body .= "Name: {$clean['name']} \n";
+			$mail->Body .= "Email: " . fixEmail($clean['email']) . " \n";
+			$mail->Body .= "URL: {$clean['url']} \n";
+			$mail->Body .= "Country: {$clean['country']} \n";
 			if (isset($favefield) && $favefield == "yes") {
-				$message .= "$favetext: {$clean['fave']} \n";
+				$mail->Body .= "$favetext: {$clean['fave']} \n";
 			}
-			$message .= "Comments: {$clean['comments']} \n";
-			$message .= "IP: {$_SERVER['REMOTE_ADDR']} \n\n";
+			$mail->Body .= "Comments: {$clean['comments']} \n";
+			$mail->Body .= "IP: {$_SERVER['REMOTE_ADDR']} \n\n";
 
-			$message .= "Manage members: {$FLurl}/admin.php?ap=manage_members&s=newbies";
+			$mail->Body .= "Manage members: {$FLurl}/admin.php?ap=manage_members&s=newbies";
 
-			if (!strstr($_SERVER['SERVER_SOFTWARE'], "Win")) {
-				$headers   = "From: $admin_email \n";
-				$headers  .= "Reply-To: " . fixEmail($clean['email']) . "";
-			} else {
-				$headers   = "From: $title <$admin_email> \n";
-				$headers  .= "Reply-To: <" . fixEmail($clean['email']) . ">";
-			}
-
-			mail($admin_email,$subject,$message,$headers);
+			$mail->send();
 		}
 
 		// add the member to the newbies txt file
@@ -197,7 +210,7 @@ if (!isset($_POST['submit']) || $show_form == true) {
 	}
 ?>
 	<label>Comments</label><br /> <textarea id="comments" name="comments" rows="3" cols="25"><?php get_data("comments"); ?></textarea><br />
-	<input type="submit" name="submit" id="submit" value="Join" /> 
+	<input type="submit" name="submit" id="submit" value="Join" />
 </p></form>
 
 <?php

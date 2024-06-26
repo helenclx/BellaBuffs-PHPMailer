@@ -1,5 +1,21 @@
 <?php
 require_once('prefs.php');
+require_once __DIR__.'/contactform/vendor/autoload.php';
+require_once __DIR__.'/contactform/config.php';
+
+$mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+$mail->setLanguage(CONTACTFORM_LANGUAGE);
+$mail->SMTPDebug = CONTACTFORM_PHPMAILER_DEBUG_LEVEL;
+$mail->isSMTP();
+$mail->Host = CONTACTFORM_SMTP_HOSTNAME;
+$mail->SMTPAuth = true;
+$mail->Username = CONTACTFORM_SMTP_USERNAME;
+$mail->Password = CONTACTFORM_SMTP_PASSWORD;
+$mail->SMTPSecure = CONTACTFORM_SMTP_ENCRYPTION;
+$mail->Port = CONTACTFORM_SMTP_PORT;
+$mail->CharSet = CONTACTFORM_MAIL_CHARSET;
+$mail->Encoding = CONTACTFORM_MAIL_ENCODING;
+
 if (isset($_COOKIE['bellabuffs'])) {
 	if ($_COOKIE['bellabuffs'] == md5($admin_name.$admin_pass.$secret)) {
 		if (isset($_GET['ap'])) { $page = $_GET['ap']; } else { $page = ""; }
@@ -17,9 +33,9 @@ if (isset($_COOKIE['bellabuffs'])) {
 					$pageurl = "admin.php?ap=manage_members";
 					$fileurl = "members.txt";
 				}
-				
+
 				echo "<p style='color: red;'><strong>Warning:</strong> Do not try to edit multiple members at once, do not try to approve and delete the same member.</p>";
-				
+
 				$count = count($file);
 				if ($count == 0) { echo '<p>No '.$wording.' members at this time.</p> <p><a href="admin.php">Back to admin panel?</a></p>'; exit(include('footer.php')); }
 
@@ -37,12 +53,12 @@ if (isset($_COOKIE['bellabuffs'])) {
 					echo "</a> ";
 				}
 				echo  "</p> \n\n ";
-	
+
 				if (isset($_GET['page']) && is_numeric($_GET['page'])) $i = $perpage * ($_GET['page'] - 1);
 				else $i = 0;
-				
+
 				$end = $i + $perpage;
-	
+
 				if ($end > $count) $end=$count;
 ?>
 				<form action="admin.php?ap=do_action" method="post">
@@ -52,7 +68,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 				<table>
 				<tr> <th>Name</th> <th>E-mail</th> <th>Website</th> <th>Country</th> <?php if (isset($favefield) && $favefield == "yes") { echo "<th>Fave</th>"; } ?> <?php if (isset($_GET['s']) && $_GET['s'] == "newbies") echo '<th>Add</th>'; ?>  <th>Edit</th> <th>Delete</th>
 				</tr>
-<?php 
+<?php
 				while ($i<$end){
 					$rowClass = ($i % 2) ? $classA : $classB;
 					list($name,$email,$dispemail,$url,$country,$fave) = preg_split("/,(?! )/",$file[$i]);
@@ -64,10 +80,10 @@ if (isset($_COOKIE['bellabuffs'])) {
 
 					echo "<td>$name</td> <td>$email</td> <td>$url</td> <td>$country</td> ";
 					if (isset($favefield) && $favefield == "yes") echo "<td>" . str_replace('|', ',', $fave) . "</td>";
-					
-					if (isset($_GET['s']) && $_GET['s'] == "newbies") 
-						echo '<td><input type="checkbox" name="appr['.$i.']" value="'.$i.'"  /></td>'; 
-						
+
+					if (isset($_GET['s']) && $_GET['s'] == "newbies")
+						echo '<td><input type="checkbox" name="appr['.$i.']" value="'.$i.'"  /></td>';
+
 					echo '<td><a href="admin.php?ap=edit_member&amp;file='.$fileurl.'&amp;mem='.$i.'"><img src="admin-icons/edit.png" title="edit" alt="edit" /></a></td>';
 					echo '<td><input type="checkbox" name="del['.$i.']" value="'.$i.'" /></td>';
 					echo "</tr>\r\n";
@@ -87,7 +103,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 				if (isset($_POST['appr']) && is_array($_POST['appr'])) {
 					$newbies = file(NEWBIES);
 					$approved = array();
-					
+
 					foreach ($_POST['appr'] as $member => $value) {
 						if (is_numeric($member) && array_key_exists($member, $newbies)) {
 							$approved[] = $newbies[$member];
@@ -106,19 +122,21 @@ if (isset($_COOKIE['bellabuffs'])) {
 						while ($i < $apprAmount) {
 							list($name,$email,$dispemail,$url,$country,$fave) = preg_split("/,(?! )/",$approved[$i]);
 
-							$subject = "You have been approved at $title";
+							// Recipients
+							$mail->setFrom($admin_email, $title);
+							$mail->addAddress(fixEmail($email), $name);
+							$mail->addReplyTo($admin_email);
 
-							$message  = $approvalMsg;
-							$message .= "Name: {$name} \r\n";
-							$message .= "Email: " . fixEmail($email) . " \r\n";
-							$message .= "URL: {$url} \r\n";
-							$message .= "Country: {$country} \r\n";
-							if (isset($favefield) && $favefield == "yes") $message .= strip_tags($favetext) . ": {$fave} \r\n";	
+							$mail->Subject = "You have been approved at $title";
 
-							if (strstr($_SERVER['SERVER_SOFTWARE'], "Win")) $headers = "From: $admin_email \n";
-							else $headers = "From: $title <$admin_email> \n";
+							$mail->Body  = $approvalMsg;
+							$mail->Body .= "Name: {$name} \r\n";
+							$mail->Body .= "Email: " . fixEmail($email) . " \r\n";
+							$mail->Body .= "URL: {$url} \r\n";
+							$mail->Body .= "Country: {$country} \r\n";
+							if (isset($favefield) && $favefield == "yes") $mail->Body .= strip_tags($favetext) . ": {$fave} \r\n";
 
-							mail(fixEmail($email),$subject,$message,$headers);
+							$mail->send();
 
 							$i++;
 						}
@@ -128,17 +146,17 @@ if (isset($_COOKIE['bellabuffs'])) {
 						if ($defaultSort == "newest") {
 							$newmembers = implode("", $approved) . "\r\n";
 							$olddata = file_get_contents(MEMBERS);
-							
+
 							$fp = fopen(MEMBERS, "w");
 							fwrite($fp, $newmembers);
 							fclose($fp);
-							
+
 							$fp = fopen(MEMBERS, "a") or die ("Couldn't open members.txt");
 							fwrite($fp, $olddata);
 							fclose($fp);
 						} elseif ($defaultSort == "oldest") {
 							$newmembers = "\r\n" . implode("", $approved);
-							
+
 							$fp = fopen(MEMBERS, "a") or die ("Couldn't open members.txt");
 							fwrite($fp, $newmembers);
 							fclose($fp);
@@ -156,7 +174,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 						fwrite($fp, $update);
 						fclose($fp);
 					}
-					
+
 					blanklinefix(NEWBIES);
 					blanklinefix(MEMBERS);
 
@@ -164,12 +182,12 @@ if (isset($_COOKIE['bellabuffs'])) {
 				}
 				if (isset($_POST['del']) && is_array($_POST['del'])) {
 					if (isset($_POST['fileloc']))
-						$fileloc = basename($_POST['fileloc']); 
+						$fileloc = basename($_POST['fileloc']);
 					else exit;
-					
+
 					$members = file(MEMBERS);
 					$newbies = file(NEWBIES);
-					
+
 					foreach ($_POST['del'] as $member => $file) {
 						if (is_numeric($member)) {
 							if ($fileloc == "newbies.txt" && array_key_exists($member, $newbies)) unset($newbies[$member]);
@@ -177,18 +195,18 @@ if (isset($_COOKIE['bellabuffs'])) {
 						}
 					}
 					if ($fileloc == "newbies.txt") $backlink = '<a href="admin.php?ap=manage_members&amp;s=newbies">Delete other pending members?</a>'; else $backlink = '<a href="admin.php?ap=manage_members">Delete other approved members?</a>';
-					
+
 					$members = implode("", $members);
 					$newbies = implode("", $newbies);
 
 					$fh = fopen(MEMBERS, "w");
 					fwrite($fh, $members);
 					fclose($fh);
-					
+
 					$fb = fopen(NEWBIES, "w");
 					fwrite($fb, $newbies);
 					fclose($fb);
-					
+
 					echo '<p>Member(s) deleted.</p>';
 				}
 				echo '<p><b>Jump to:</b> <a href="admin.php?ap=manage_members">members</a> / <a href="admin.php?ap=manage_members&amp;s=newbies">pending members</a></p>';
@@ -204,11 +222,11 @@ if (isset($_COOKIE['bellabuffs'])) {
 				} elseif (!isset($_GET['file']) || $_GET['file'] == "" || !file_exists($_GET['file'])) {
 					echo "<p>You didn't select a valid file.</p>";
 					include('footer.php');
-					exit;				
+					exit;
 				} else {
 					if (is_numeric($_GET['mem'])) $mem = $_GET['mem']; else exit("Oops, not a valid member number.");
 					if (file_exists($_GET['file'])) $file = $_GET['file']; else exit("Oops, the important .txt files don't exist!");
-					
+
 					$fh = fopen($file, "r");
 					while(!feof($fh)) {
 						$content[] = fgets($fh, 4096);
@@ -244,7 +262,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 <?php
 					}
 ?>
-					<input type="submit" name="submit" id="submit" value="continue" /> 
+					<input type="submit" name="submit" id="submit" value="continue" />
 					</p></form>
 
 <?php
@@ -265,7 +283,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 
 				$editedMember = $clean['name'] . "," . breakEmail($clean['email']) . "," . $clean['dispemail'] . "," . $clean['url'] . "," . $clean['country'] . "," . $clean['fave'] . "\n";
 
-				$mem = $clean['member'];				
+				$mem = $clean['member'];
 				$file = $clean['file'];
 
 				$fh = fopen($file, "r");
@@ -318,7 +336,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 					include('footer.php');
 					exit;
 				}
-				
+
 				$_POST['spamword'] = cleanUp(str_replace(',','',$_POST['spamword']));
 
 				echo "<p>The following word is now blacklisted:</p>\n\n<p>{$_POST['spamword']}</p>\n\n";
@@ -439,7 +457,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 				<form method="post" action="?ap=add_button_process" enctype="multipart/form-data"><p>
 				<label><input type="file" name="file" id="file" /> Upload Button</label><br />
 				<label>Donated?</label><br />
-				<input type="radio" id="donatedyes" name="donated" value="yes" /> Yes 
+				<input type="radio" id="donatedyes" name="donated" value="yes" /> Yes
 				<input type="radio" id="donatedno" name="donated" value="no" checked="checked" /> No<br />
 
 				<label><input type="text" id="donatorname" name="donatorname" /> Donator Name</label><br />
@@ -454,12 +472,12 @@ if (isset($_COOKIE['bellabuffs'])) {
 					echo "<p>The \"buttons\" directory does not exist and therefore the button could not be uploaded.</p>";
 					include('footer.php');
 					exit;
-				}	
+				}
 				if (empty($_FILES['file'])) {
 					echo "<p>You did not choose an image to upload.</p>";
 					include('footer.php');
 					exit;
-				}			
+				}
 				if (getimagesize($_FILES['file']['tmp_name']) === FALSE) {
 					echo "<p>That is not a valid image file.</p>";
 					include('footer.php');
@@ -658,10 +676,10 @@ if (isset($_COOKIE['bellabuffs'])) {
 				} else {
 					$filename = $clean['filename'];
 				}
-				
+
 				$editedButton = $filename . "," . $clean['width'] . "," . $clean['height'] . "," . $clean['donated'] . "," . $clean['donatorname'] . "," . $clean['donatorurl'] . "\n";
 
-				$button = $clean['buttonnum'];				
+				$button = $clean['buttonnum'];
 
 				$fh = fopen(BUTTONS, "r");
 				while(!feof($fh)) {
@@ -685,7 +703,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 ?>
 				<h4>Add New Update</h4>
 				<p>If updates details is left blank, only a date will be shown.</p>
-				
+
 				<form action="admin.php?ap=update_process" method="post"><p>
 				<label><input type="text" name="date" id="date" value="<?php echo date($timestamp); ?>" readonly="readonly" /> Date</label><br />
 				<label><textarea id="updatedetails" name="updatedetails"></textarea> Details</label><br />
@@ -839,7 +857,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 					include('footer.php');
 					exit;
 				}
-				
+
 ?>
 				<table>
 				<tr> <th>Button</th> <th>Name</th> <th>Email</th> <th>URL</th> <th>Site Name</th> <th>Admin</th></tr>
@@ -894,7 +912,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 					$filename = $clean['filename'];
 				}
 				$editedAff = $filename . "," . $clean['affName'] . "," . breakEmail($clean['affEmail']) . "," . $clean['affURL'] . "," . $clean['affSitename'] . "\n";
-				$aff = $clean['affnum'];				
+				$aff = $clean['affnum'];
 
 				$fh = fopen(AFFILIATES, "r");
 				while(!feof($fh)) {
@@ -918,22 +936,16 @@ if (isset($_COOKIE['bellabuffs'])) {
 				if (isset($_GET['p']) && $_GET['p'] == "process") {
 					foreach ($_POST as $key => $val) {
 						$clean[$key] = stripslashes(trim($val));
-					} 
-
-					$subject = "E-mail from the $FLsubject fanlisting";
-
-					if (strstr($_SERVER['SERVER_SOFTWARE'], "Win")) {
-						$clean['to'] = str_replace('>', '', $clean['to']);
-						$clean['to'] = str_replace('<', '', $clean['to']);
-
-						$headers   = "From: $admin_email \n";
-						$headers  .= "Reply-To: $admin_email";
-					} else {
-						$headers   = "From: $title <$admin_email> \n";
-						$headers  .= "Reply-To: <$admin_email>";
 					}
 
-					if (mail($clean['to'],$subject,$clean['message'],$headers)) {
+					// Recipients
+					$mail->setFrom($admin_email, $title);
+					$mail->addAddress($clean['to']);
+					$mail->addReplyTo($admin_email);
+
+					$mail->Subject = "E-mail from the $FLsubject fanlisting";
+
+					if ($mail->send()) {
 						echo "<p>E-mail sent!</p>";
 						echo "<p><a href='admin.php'>Back to admin panel?</a></p>";
 					} else {
@@ -1005,7 +1017,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 
 <table>
 <tr> <th>Name</th> <th>E-mail</th> <th>Website</th> <th>Country</th> <?php if (isset($favefield) && $favefield == "yes") { echo "<th>Fave</th>"; } ?> <th>Admin</th></tr>
-<tr> <td><?php echo $name; ?></td> 
+<tr> <td><?php echo $name; ?></td>
 <td><?php echo "<a href='mailto:".fixEmail($email)."'>email</a>"; ?></td>
 <td><?php echo $url; ?></td>
 <td><?php echo $country; ?></td>

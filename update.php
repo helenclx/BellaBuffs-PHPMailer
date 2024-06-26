@@ -1,6 +1,8 @@
 <?php
 $show_form = true;
 $error_msg = NULL;
+require_once __DIR__.'/contactform/vendor/autoload.php';
+require_once __DIR__.'/contactform/config.php';
 
 if (isset($_POST['submit'])) {
 	require_once('prefs.php');
@@ -34,10 +36,10 @@ if (isset($_POST['submit'])) {
 		include('footer.php');
 		exit;
 	}
-	
+
 	if (isBot() !== false)
 		$error_msg .= "No bots please! UA reported as: ".$_SERVER['HTTP_USER_AGENT'] . "\r\n";
-	
+
 	if (substr_count($_POST['comments'], 'http://') > 1)
 		$error_msg .= "Too many URLs; we've assumed you're spam and 'lost' your application. Please try again without any extra URLs if you're a geniune person :)\r\n";
 
@@ -88,33 +90,42 @@ if (isset($_POST['submit'])) {
 
 		if ($error_msg == NULL) {
 			$show_form = false;
-			
-			$subject = "Update member at $title";
 
-			$message  = "A member at your $FLsubject fanlisting wants updating with following details: \n\n";
+			$mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+			// Server settings
+			$mail->setLanguage(CONTACTFORM_LANGUAGE);
+			$mail->SMTPDebug = CONTACTFORM_PHPMAILER_DEBUG_LEVEL;
+			$mail->isSMTP();
+			$mail->Host = CONTACTFORM_SMTP_HOSTNAME;
+			$mail->SMTPAuth = true;
+			$mail->Username = CONTACTFORM_SMTP_USERNAME;
+			$mail->Password = CONTACTFORM_SMTP_PASSWORD;
+			$mail->SMTPSecure = CONTACTFORM_SMTP_ENCRYPTION;
+			$mail->Port = CONTACTFORM_SMTP_PORT;
+			$mail->CharSet = CONTACTFORM_MAIL_CHARSET;
+			$mail->Encoding = CONTACTFORM_MAIL_ENCODING;
 
-			$message .= "Name: {$clean['name']} \n";
-			$message .= "Email: ".strtolower($clean['email'])." \n";
-			$message .= "New Email: {$clean['newemail']} \n";
-			$message .= "New URL: {$clean['newurl']} \n";
-			$message .= "Country: {$clean['country']} \n";
-			$message .= "Comments: {$clean['comments']} \n";
-			$message .= "IP: {$_SERVER['REMOTE_ADDR']} \n\n";
+			// Recipients
+			$mail->setFrom($admin_email, $title);
+			$mail->addAddress($admin_email, $admin_name);
 
-			$message .= "Manage members: {$FLurl}/admin.php";
+			$mail->Subject = "Update member at $title";
 
-			if (!strstr($_SERVER['SERVER_SOFTWARE'], "Win")) {
-				$headers   = "From: $admin_email \n";
-				$headers  .= "Reply-To: $clean[email]";
+			$mail->Body  = "A member at your $FLsubject fanlisting wants updating with following details: \n\n";
+			$mail->Body .= "Name: {$clean['name']} \n";
+			$mail->Body .= "Email: ".strtolower($clean['email'])." \n";
+			$mail->Body .= "New Email: {$clean['newemail']} \n";
+			$mail->Body .= "New URL: {$clean['newurl']} \n";
+			$mail->Body .= "Country: {$clean['country']} \n";
+			$mail->Body .= "Comments: {$clean['comments']} \n";
+			$mail->Body .= "IP: {$_SERVER['REMOTE_ADDR']} \n\n";
+
+			$mail->Body .= "Manage members: {$FLurl}/admin.php";
+
+			if ($mail->send()) {
+				echo "<h1>Update Sent!</h1><p>Your updated information has been sent to the fanlisting owner.</p>";
 			} else {
-				$headers   = "From: $title <$admin_email> \n";
-				$headers  .= "Reply-To: <$clean[email]>";
-			}
-
-			if (mail($admin_email,$subject,$message,$headers)) {
-				echo "<h1>Update Sent!</h1> \n <p>Your updated information has been sent.</p>";
-			} else {
-				echo "<h1>Oops!</h1> \n <p>Your updated information could not be sent this time, please contact the fanlisting owner.</p>";
+				echo "<h1>Oops!</h1><p>Your updated information could not be sent this time, please contact the fanlisting owner.</p>";
 			}
 		}
 	} else {
@@ -157,9 +168,9 @@ if (!isset($_POST['submit']) || $show_form == true) {
 <?php
 	}
 ?>
-	<label>Comments</label><br /> 
+	<label>Comments</label><br />
 	<textarea name="comments" id="comments" rows="3" cols="25"></textarea><br />
-	<input type="submit" name="submit" id="submit" value="Update" /> 
+	<input type="submit" name="submit" id="submit" value="Update" />
 </p></form>
 
 <?php

@@ -1,5 +1,7 @@
 <?php
 require_once('prefs.php');
+require_once __DIR__.'/contactform/vendor/autoload.php';
+require_once __DIR__.'/contactform/config.php';
 
 $error_msg = null;
 $result = null;
@@ -49,26 +51,38 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		$error_msg .= "Invalid website url.\r\n";
 
 	if ($error_msg == NULL && $points <= $maxPoints) {
-		$subject = "Contact form submission from ". $title;
+		$mail = new \PHPMailer\PHPMailer\PHPMailer(true);
 
-		$message = "You received this e-mail message through your fanlisting: \n\n";
+		// Server settings
+		$mail->setLanguage(CONTACTFORM_LANGUAGE);
+		$mail->SMTPDebug = CONTACTFORM_PHPMAILER_DEBUG_LEVEL;
+		$mail->isSMTP();
+		$mail->Host = CONTACTFORM_SMTP_HOSTNAME;
+		$mail->SMTPAuth = true;
+		$mail->Username = CONTACTFORM_SMTP_USERNAME;
+		$mail->Password = CONTACTFORM_SMTP_PASSWORD;
+		$mail->SMTPSecure = CONTACTFORM_SMTP_ENCRYPTION;
+		$mail->Port = CONTACTFORM_SMTP_PORT;
+		$mail->CharSet = CONTACTFORM_MAIL_CHARSET;
+		$mail->Encoding = CONTACTFORM_MAIL_ENCODING;
+
+		// Recipients
+		$mail->setFrom($admin_email, $title.' Contact Form');
+		$mail->addAddress($admin_email, $admin_name);
+		$mail->addReplyTo($_POST['email'], $_POST['name']);
+
+		$mail->Subject = "Contact form submission from ". $title;
+
+		$mail->Body = "You received this e-mail message through your fanlisting: \n\n";
 		foreach ($_POST as $key => $val) {
-			$message .= ucwords($key) . ": " . cleanUp($val) . "\r\n";
+			$mail->Body .= ucwords($key) . ": " . cleanUp($val) . "\r\n";
 		}
-		$message .= "\r\n";
-		$message .= 'IP: '.$_SERVER['REMOTE_ADDR']."\r\n";
-		$message .= 'Browser: '.$_SERVER['HTTP_USER_AGENT']."\r\n";
-		$message .= 'Points: '.$points;
+		$mail->Body .= "\r\n";
+		$mail->Body .= 'IP: '.$_SERVER['REMOTE_ADDR']."\r\n";
+		$mail->Body .= 'Browser: '.$_SERVER['HTTP_USER_AGENT']."\r\n";
+		$mail->Body .= 'Points: '.$points;
 
-		if (strstr($_SERVER['SERVER_SOFTWARE'], "Win")) {
-			$headers = "From: {$admin_email}\n";
-			$headers .= "Reply-To: {$_POST['email']}";
-		} else {
-			$headers = "From: {$title} <{$admin_email}>\n";
-			$headers .= "Reply-To: {$_POST['email']}";
-		}
-
-		if (mail($admin_email,$subject,$message,$headers)) {
+		if ($mail->send()) {
 			$result = 'Your mail was successfully sent.';
 			$disable = true;
 		} else {
