@@ -12,7 +12,7 @@ This BellaBuffs fork is tested with PHP 8.2 on InfinityFree's free hosting.
 
 You are free to use this BellaBuffs fork and customise it as much as you like. You may credit me for this fork specifically, but it is not required.
 
-However, regardless if you choose to credit me for this fork or not, per the original author Jem Turner's Read Me, you must link back to Jem Turner at https://www.jemjabella.co.uk/. By using BellaBuffs, you also agree not to sell copies of the script, or services relating to the script (i.e. installation, customisation, etc) without written permission of Jem Turner. You can read [Jem Turner's original Read Me file here](https://github.com/helenclx/BellaBuffs-PHPMailer/blob/master/README_original.txt).
+However, regardless if you choose to credit me for this fork or not, per the original author Jem Turner's Read Me, you must link back to Jem Turner at https://www.jemjabella.co.uk/. By using BellaBuffs, you also agree not to sell copies of the script, or services relating to the script (i.e. installation, customisation, etc) without written permission of Jem Turner. You can read [Jem Turner's original Read Me file here](https://github.com/helenclx/BellaBuffs-PHPMailer/blob/master/README-original.txt).
 
 ## Credits
 * [Jem Turner](https://www.jemjabella.co.uk/) - The original author of [BellaBuffs](https://www.jemjabella.co.uk/scripts/bellabuffs/).
