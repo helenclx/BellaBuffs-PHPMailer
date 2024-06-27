@@ -111,16 +111,16 @@ if ($result != NULL)
 	<p><input type="hidden" name="nojs" id="nojs" /></p>
 </noscript>
 <p>
-	<label for="name">Name *</label><br /> <input type="text" id="name" name="name" value="<?php get_data("name"); ?>" /> <br />
-	<label for="email">E-mail *</label><br /> <input type="text" id="email" name="email" value="<?php get_data("email"); ?>" /> <br />
-	<label for="url">Website</label><br /> <input type="text" id="url" name="url" value="http://" /> <br />
+	<label for="name">Name *</label><br /> <input type="text" id="name" name="name" value="<?php get_data("name"); ?>" required /> <br />
+	<label for="email">E-mail *</label><br /> <input type="text" id="email" name="email" value="<?php get_data("email"); ?>" required /> <br />
+	<label for="url">Website</label><br /> <input type="text" id="url" name="url" placeholder="http://" /> <br />
 	<label for="reason">Reason for contact</label><br /> <select name="reason" id="reason">
 								<option value="affiliate-request">Affiliate Request</option>
 								<option value="couldnt-join">Joining Problem</option>
 								<option value="button-donation">Button Donation</option>
 								<option value="other">Other</option>
 	</select> <br />
-	<label for="comments">Comments *</label><br /> <textarea name="comments" id="comments" rows="3" cols="25"><?php get_data("comments"); ?></textarea><br />
+	<label for="comments">Comments *</label><br /> <textarea name="comments" id="comments" rows="3" cols="25" required><?php get_data("comments"); ?></textarea><br />
 </p>
 <p>
 	<input type="submit" name="submit" id="submit" value="Send" <?php if (isset($disable) && $disable === true) echo ' disabled="disabled"'; ?> />

@@ -189,13 +189,13 @@ if (!isset($_POST['submit']) || $show_form == true) {
 ?>
 
 <form action="join.php" method="post"><p>
-	<label>Name *</label><br /> <input type="text" id="name" name="name" value="<?php get_data("name"); ?>" /> <br />
-	<label>E-mail *</label><br /> <input type="text" id="email" name="email" value="<?php get_data("email"); ?>" /> <br />
+	<label>Name *</label><br /> <input type="text" id="name" name="name" value="<?php get_data("name"); ?>" required /> <br />
+	<label>E-mail *</label><br /> <input type="text" id="email" name="email" value="<?php get_data("email"); ?>" required /> <br />
 	<label>Display E-mail?</label><br />
 	<input type="radio" id="dispemailyes" name="dispemail" value="yes" checked="checked" /> Yes
 	<input type="radio" id="dispemailno" name="dispemail" value="no" /> No<br />
 	<label>Website</label><br /> <input type="text" id="url" name="url"  value="<?php get_data("url"); ?>" /> <br />
-	<label>Country *</label><br /> <select name="country" id="country"><option value="null">Please select a country:</option><?php get_countries($country); ?></select> <br />
+	<label>Country *</label><br /> <select name="country" id="country" required><option value="null">Please select a country:</option><?php get_countries($country); ?></select> <br />
 <?php
 	if (isset($favefield) && $favefield == "yes") {
 ?>
