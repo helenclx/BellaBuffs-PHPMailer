@@ -2,7 +2,7 @@
 
 This is a fork of the fanlisting PHP script [BullaBuffs](https://github.com/jemjabella/BellaBuffs), with [PHPMailer](https://github.com/PHPMailer/PHPMailer) powering the email sending functions.
 
-## Desciption
+## Description
 
 BellaBuffs includes the optional features to email new members after submitting the join form, email the fanlisting admin when a new member joins or email new members when their applications were approved. The original BellaBuffs script achieved this by using PHP's built-in `mail()` feature.
 
