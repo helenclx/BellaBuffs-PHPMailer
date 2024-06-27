@@ -16,6 +16,7 @@ This BellaBuffs fork has been tested with PHP 8.2 on InfinityFree's free hosting
 * Integrate PHPMailer for the email sending features, should the fanlisting owner enables these features
 * Email sending features are enabled by default, but can be disabled in `prefs.php`
 * Add HTML `required` attribute to required form fields
+* Update list of countries
 * Add a buttons folder (with a placeholder file to enable the folder to be pushed via Git), so users do not need to manually create the folder to store uploaded buttons
 
 ## Usage Instructions
