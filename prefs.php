@@ -13,17 +13,17 @@ $secret = "pleasechangeme123";   // this is like a second password. you won't ha
 
 
 // EMAIL SETTINGS
-$emailnewbies = "no";	// (yes or no) email new members after joining ($admin_email must be filled in, above)
-$emailadmin = "no";   // (yes or no) email admin when new member joins ($admin_email must be filled in, above)
-$emailapproval = "no";   // (yes or no) email member when approved ($admin_email must be filled in, above)
+$emailnewbies = "yes";	// (yes or no) email new members after joining ($admin_email must be filled in, above)
+$emailadmin = "yes";   // (yes or no) email admin when new member joins ($admin_email must be filled in, above)
+$emailapproval = "yes";   // (yes or no) email member when approved ($admin_email must be filled in, above)
 
 // message e-mailed to new members on join. use \n for a new line
 // use \r\n for a new line, member details will automatically appear underneath
-$thanksjoinMsg = "Thank you for joining my fanlisting: $title \r\nWe will process your application shortly."; 
+$thanksjoinMsg = "Thank you for joining my fanlisting: $title \r\nWe will process your application shortly.";
 
-// message e-mailed to new members on approval. 
+// message e-mailed to new members on approval.
 // use \r\n for a new line, member details automatically appear underneath
-$approvalMsg = "You've been approved at the fanlisting: $title with the following details: \r\n\r\n";   
+$approvalMsg = "You've been approved at the fanlisting: $title with the following details: \r\n\r\n";
 
 
 // GENERAL SETTINGS
