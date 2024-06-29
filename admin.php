@@ -253,7 +253,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 					<label><input type="text" id="email" name="email" value="<?php echo fixEmail($memary['1']);?>" /> E-mail</label><br />
 					<label><input type="radio" id="dispemailyes" name="dispemail" value="yes" <?php if ($memary['2'] == "yes") { echo "checked=\"checked\""; } ?> /> Yes</label>
 					<label><input type="radio" id="dispemailno" name="dispemail" value="no" <?php if ($memary['2'] == "no") { echo "checked=\"checked\""; } ?> /> No</label> Display E-mail?<br />
-					<label><input type="text" id="url" name="url" value="<?php echo $memary['3'];?>" /> Website</label><br />
+					<label><input type="url" id="url" name="url" value="<?php echo $memary['3'];?>" /> Website</label><br />
 					<label><select name="country" id="country"><?php get_countries($memary['4']); ?></select> Country</label><br />
 <?php
 					if (isset($favefield) && $favefield == "yes") {

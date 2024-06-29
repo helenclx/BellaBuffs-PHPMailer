@@ -158,7 +158,7 @@ if (!isset($_POST['submit']) || $show_form == true) {
 	<label>Display E-mail?</label><br />
 	<input type="radio" id="dispemailyes" name="dispemail" value="yes" checked="checked" /> Yes
 	<input type="radio" id="dispemailno" name="dispemail" value="no" /> No<br />
-	<label>New Website?</label><br /> <input type="text" id="newurl" name="newurl" value="http://" /> <br />
+	<label>New Website?</label><br /> <input type="url" id="newurl" name="newurl" value="http://" /> <br />
 	<label>Country *</label><br /> <select name="country" id="country" required><option value="null">Please select a country:</option><?php get_countries("null"); ?></select> <br />
 <?php
 	if (isset($captcha) && $captcha == "yes") {

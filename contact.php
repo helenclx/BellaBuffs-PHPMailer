@@ -113,7 +113,7 @@ if ($result != NULL)
 <p>
 	<label for="name">Name *</label><br /> <input type="text" id="name" name="name" value="<?php get_data("name"); ?>" required /> <br />
 	<label for="email">E-mail *</label><br /> <input type="email" id="email" name="email" value="<?php get_data("email"); ?>" required /> <br />
-	<label for="url">Website</label><br /> <input type="text" id="url" name="url" placeholder="http://" /> <br />
+	<label for="url">Website</label><br /> <input type="url" id="url" name="url" placeholder="http://" /> <br />
 	<label for="reason">Reason for contact</label><br /> <select name="reason" id="reason">
 								<option value="affiliate-request">Affiliate Request</option>
 								<option value="couldnt-join">Joining Problem</option>
