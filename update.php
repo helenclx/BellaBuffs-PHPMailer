@@ -153,8 +153,8 @@ if (!isset($_POST['submit']) || $show_form == true) {
 
 <form action="update.php" method="post"><p>
 	<label>Name *</label><br /> <input type="text" id="name" name="name" required /> <br />
-	<label>Old E-mail *</label><br /> <input type="text" id="email" name="email" required /> <br />
-	<label>New E-mail</label><br /> <input type="text" id="newemail" name="newemail" /> <br />
+	<label>Old E-mail *</label><br /> <input type="email" id="email" name="email" required /> <br />
+	<label>New E-mail</label><br /> <input type="email" id="newemail" name="newemail" /> <br />
 	<label>Display E-mail?</label><br />
 	<input type="radio" id="dispemailyes" name="dispemail" value="yes" checked="checked" /> Yes
 	<input type="radio" id="dispemailno" name="dispemail" value="no" /> No<br />

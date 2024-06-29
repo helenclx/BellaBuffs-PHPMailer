@@ -730,7 +730,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 ?>
 				<form method="post" action="?ap=add_affiliate_process" enctype="multipart/form-data"><p>
 				<label><input type="text" name="affName" id="affName" /> Affiliate Name</label><br />
-				<label><input type="text" name="affEmail" id="affEmail" /> Affiliate E-mail</label><br />
+				<label><input type="email" name="affEmail" id="affEmail" /> Affiliate E-mail</label><br />
 				<label><input type="text" name="affURL" id="affURL" /> Affiliate URL</label><br />
 				<label><input type="text" name="affSitename" id="affSitename" /> Affiliate Site Name</label><br />
 				<label><input type="file" name="affButton" id="affButton" /> Affiliate Button</label><br />
@@ -845,7 +845,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 							<img src="buttons/<?php echo $affArray['0'];?>" style="vertical-align: middle;" alt="" /> Old Affiliate Button<br />
 							<label><input type="file" name="newbutton" id="newbutton" /> New Affiliate Button</label><br />
 							<label><input type="text" name="affName" id="affName" value="<?php echo $affArray['1'];?>" /> Affiliate Name</label><br />
-							<label><input type="text" name="affEmail" id="affEmail" value="<?php echo fixEmail($affArray['2']);?>" /> Affiliate E-mail</label><br />
+							<label><input type="email" name="affEmail" id="affEmail" value="<?php echo fixEmail($affArray['2']);?>" /> Affiliate E-mail</label><br />
 							<label><input type="text" name="affURL" id="affURL" value="<?php echo $affArray['3'];?>" /> Affiliate URL</label><br />
 							<label><input type="text" name="affSitename" id="affSitename" value="<?php echo $affArray['4'];?>" /> Affiliate Site Name</label><br />
 							<input type="submit" name="submit" id="submit" value="Edit" />
@@ -1039,7 +1039,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 ?>
 				<p>Search for member by e-mail address:</p>
 				<form action="admin.php?ap=search&amp;p=process" method="post"><p>
-				<label><input type="text" name="email" id="email" /> E-mail</label><br />
+				<label><input type="email" name="email" id="email" /> E-mail</label><br />
 				<input type="submit" name="submit" id="submit" value="Search" />
 				</form>
 <?php

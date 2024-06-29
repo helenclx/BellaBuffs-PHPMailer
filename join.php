@@ -190,7 +190,7 @@ if (!isset($_POST['submit']) || $show_form == true) {
 
 <form action="join.php" method="post"><p>
 	<label>Name *</label><br /> <input type="text" id="name" name="name" value="<?php get_data("name"); ?>" required /> <br />
-	<label>E-mail *</label><br /> <input type="text" id="email" name="email" value="<?php get_data("email"); ?>" required /> <br />
+	<label>E-mail *</label><br /> <input type="email" id="email" name="email" value="<?php get_data("email"); ?>" required /> <br />
 	<label>Display E-mail?</label><br />
 	<input type="radio" id="dispemailyes" name="dispemail" value="yes" checked="checked" /> Yes
 	<input type="radio" id="dispemailno" name="dispemail" value="no" /> No<br />
