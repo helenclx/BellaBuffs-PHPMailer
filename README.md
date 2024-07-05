@@ -18,6 +18,7 @@ This BellaBuffs fork has been tested with PHP 8.2 on InfinityFree's free hosting
 * HTML5 form validation, including E-mail and URL input types and the `required` attribute
 * Update list of countries
 * Add a buttons folder (with a placeholder file to enable the folder to be pushed via Git), so users do not need to manually create the folder to store uploaded buttons
+* Allows fnalisting members to change their favourites with the update form if favourites field is enabled
 
 ## Usage Instructions
 1. Customise your preferences in `prefs.php`
