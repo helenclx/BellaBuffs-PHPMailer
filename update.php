@@ -67,8 +67,8 @@ if (isset($_POST['submit'])) {
 		if (empty($clean['dispemail']))
 			$clean['dispemail'] = "no";
 
-		if (!isset($favefield) || $favefield == "no" || !isset($clean['fave']))
-			$clean['fave'] = NULL;
+		if (!isset($favefield) || $favefield == "no" || !isset($clean['newfave']))
+			$clean['newfave'] = NULL;
 
 		// let's do some security and spam checks
 		if (empty($clean['name']) || empty($clean['email']) || empty($clean['country']))
@@ -77,7 +77,7 @@ if (isset($_POST['submit'])) {
 			$error_msg .= "That name is not valid. Your name must contain letters only, and must be less than 15 characters. \r\n";
 		if ($clean['dispemail'] != "yes" && $clean['dispemail'] != "no")
 			$error_msg .= "You didn't choose whether or not you'd like to show your e-mail address on the member list. \r\n";
-		if ($clean['fave'] != "" && (!preg_match("/^[a-zA-Z0-9-'\s]*$/", $clean['fave']) || strlen($clean['fave']) > 20))
+		if ($clean['newfave'] != "" && (!preg_match("/^[a-zA-Z0-9-'\s]*$/", $clean['newfave']) || strlen($clean['newfave']) > 20))
 			$error_msg .= "Your chosen \"favourite\" is not valid. It must contain letters and numbers only, and must be less than 20 characters. \r\n";
 		if (!preg_match('/^([a-z0-9])(([-a-z0-9._])*([a-z0-9]))*\@([a-z0-9])(([a-z0-9-])*([a-z0-9]))+' . '(\.([a-z0-9])([-a-z0-9_-])?([a-z0-9])+)+$/i', strtolower($clean['email'])))
 			$error_msg .= "The email address you have used is not valid. \r\n";
@@ -117,6 +117,9 @@ if (isset($_POST['submit'])) {
 			$mail->Body .= "New Email: {$clean['newemail']} \n";
 			$mail->Body .= "New URL: {$clean['newurl']} \n";
 			$mail->Body .= "Country: {$clean['country']} \n";
+			if (isset($favefield) && $favefield == "yes") {
+				$mail->Body .= "New $favetext: {$clean['newfave']} \n";
+			}
 			$mail->Body .= "Comments: {$clean['comments']} \n";
 			$mail->Body .= "IP: {$_SERVER['REMOTE_ADDR']} \n\n";
 
@@ -161,6 +164,11 @@ if (!isset($_POST['submit']) || $show_form == true) {
 	<label>New Website?</label><br /> <input type="url" id="newurl" name="newurl" placeholder="http://" /> <br />
 	<label>Country *</label><br /> <select name="country" id="country" required><option value="null">Please select a country:</option><?php get_countries("null"); ?></select> <br />
 <?php
+	if (isset($favefield) && $favefield == "yes") {
+?>
+	<label><?php echo $favetext; ?></label><br /> <input type="text" id="newfave" name="newfave"  value="<?php get_data("newfave"); ?>" /> <br />
+<?php
+	}
 	if (isset($captcha) && $captcha == "yes") {
 ?>
 	<img src="captcha.php" alt="" /><br />
