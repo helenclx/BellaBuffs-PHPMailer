@@ -4,7 +4,7 @@ This is a fork of the fanlisting PHP script [BullaBuffs](https://github.com/jemj
 
 ## Description
 
-BellaBuffs includes the optional features to email new members after submitting the join form, email the fanlisting admin when a new member joins or email new members when their applications were approved. The original BellaBuffs script achieved this by using PHP's built-in `mail()` feature.
+BellaBuffs includes the optional features to email new members after submitting the join form, email the fanlisting admin when a new member joins or email new members when their applications were approved. The original BellaBuffs script achieved this by using PHP's built-in `mail()` function.
 
 This fork replaces the PHP `mail()` functions from BellaBuffs with PHPMailer, allowing a fanlisting to send out emails with SMTP, provided the fanlisting owner chooses to enable them, even if the hosting server does not support the PHP `mail()` function.
 
@@ -21,6 +21,7 @@ This BellaBuffs fork has been tested with PHP 8.2 on InfinityFree's free hosting
 * Allows fnalisting members to change their favourites with the update form if favourites field is enabled
 
 ## Usage Instructions
+1. Download the [latest release pf BellaBuffs-PHPMailer](https://github.com/helenclx/BellaBuffs-PHPMailer/releases/latest) from the GitHub repository.
 1. Customise your preferences in `prefs.php`
 1. Configure your email SMTP settings in `contactform/config.php`
 1. Upload all files of this fork to a directory where you want your fanlisting to be located
