@@ -10,7 +10,7 @@ This fork replaces the PHP `mail()` functions from BellaBuffs with PHPMailer, al
 
 The PHPMailer script that is incorporated in this fork is based on [InfinityFree](https://www.infinityfree.com/)'s [PHPMailer contact form script](https://github.com/InfinityFreeHosting/contactform). As InfinityFree's free hosting plan [does not support PHP `mail()` function](https://forum.infinityfree.com/t/sending-email-from-your-website-php-mail/49242), InfinityFree has provided their contact form script as an alternative.
 
-This BellaBuffs fork has been tested with PHP 8.2 on InfinityFree's free hosting.
+This BellaBuffs fork has been tested with PHP 8.2 on InfinityFree's free hosting and PHP 8.3 on Hostinger's Premium Shared Hosting.
 
 ## New Features
 * Integrate PHPMailer for the email sending features, should the fanlisting owner enables these features
