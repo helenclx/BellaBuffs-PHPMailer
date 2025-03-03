@@ -40,7 +40,10 @@ if (isset($_POST['submit'])) {
 	if (isBot() !== false)
 		$error_msg .= "No bots please! UA reported as: ".$_SERVER['HTTP_USER_AGENT'] . "\r\n";
 
-	if (substr_count($_POST['comments'], 'http://') > 1)
+	if (
+		substr_count($_POST['comments'], 'https://') > 1 ||
+		substr_count($_POST['comments'], 'http://') > 1
+	)
 		$error_msg .= "Too many URLs; we've assumed you're spam and 'lost' your application. Please try again without any extra URLs if you're a geniune person :)\r\n";
 
 	$exploits = "/(content-type|bcc:|cc:|document.cookie|onclick|onload|javascript|alert)/i";

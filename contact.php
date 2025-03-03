@@ -24,7 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		)
 			$points += 2;
 
-	if (strpos($_POST['comments'], "http://") !== false || strpos($_POST['comments'], "www.") !== false)
+	if (
+		strpos($_POST['comments'], "https://") !== false ||
+		strpos($_POST['comments'], "http://") !== false ||
+		strpos($_POST['comments'], "www.") !== false
+	)
 		$points += 2;
 	if (isset($_POST['nojs']))
 		$points += 1;
