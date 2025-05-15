@@ -22,12 +22,13 @@ This BellaBuffs fork has been tested with PHP 8.2 on InfinityFree's free hosting
 * Check for `https://` in addition to `http://` for potential spam in the comment fields.
 
 ## Usage Instructions
-1. Download the [latest release pf BellaBuffs-PHPMailer](https://github.com/helenclx/BellaBuffs-PHPMailer/releases/latest) from the GitHub repository.
-1. Customise your preferences in `prefs.php`
-1. Configure your email SMTP settings in `contactform/config.php`
-1. Upload all files of this fork to a directory where you want your fanlisting to be located
-1. Set file permissions of all the `.txt` files to CHMOD 666 to make the text files writeable
-1. Set permission of the `buttons` directory to CHMOD 777 to enable buttons to be uploaded to the directory (NOTE: It is recommended to set the permissions of `buttons` directory to CHMOD 755 when not using the button upload features for better security)
+1. Download the [latest release of BellaBuffs-PHPMailer](https://github.com/helenclx/BellaBuffs-PHPMailer/releases/latest) from the GitHub repository, then extract the archive.
+    - Alternately, you can clone this repository, as the files can be used out of the box.
+1. Customise your preferences in `prefs.php`.
+1. Configure your email SMTP settings in `contactform/config.php`.
+1. Upload all files of this fork to a directory where you want your fanlisting to be hosted on. 
+1. Set file permissions of all the `.txt` files to CHMOD 666 to make the text files writeable.
+1. Set permission of the `buttons` directory to CHMOD 777 to enable buttons to be uploaded to the directory (NOTE: For better security, it is recommended to set the permissions of `buttons` directory to CHMOD 755 when not using the button upload features).
 
 More instructions for using BellaBuffs can be found in the [original Read Me of BellaBuffs](https://github.com/helenclx/BellaBuffs-PHPMailer/blob/master/README-original.txt).
 
@@ -39,5 +40,5 @@ However, regardless if you choose to credit me for this fork or not, per the ori
 
 ## Credits
 * [Jem Turner](https://www.jemjabella.co.uk/) - The original author of [BellaBuffs](https://www.jemjabella.co.uk/scripts/bellabuffs/)
-* [InfinityFree](https://www.infinityfree.com/) for their [PHPMailer contact form script](https://github.com/PHPMailer/PHPMailer)
+* [InfinityFree](https://www.infinityfree.com/) for their [PHPMailer contact form script](https://github.com/InfinityFreeHosting/contactform)
 * [PHPMailer](https://github.com/PHPMailer/PHPMailer)
