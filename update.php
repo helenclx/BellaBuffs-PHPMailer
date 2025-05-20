@@ -158,28 +158,28 @@ if (!isset($_POST['submit']) || $show_form == true) {
 ?>
 
 <form action="update.php" method="post"><p>
-	<label>Name *</label><br /> <input type="text" id="name" name="name" required /> <br />
-	<label>Old E-mail *</label><br /> <input type="email" id="email" name="email" required /> <br />
-	<label>New E-mail</label><br /> <input type="email" id="newemail" name="newemail" /> <br />
+	<label for="name">Name *</label><br /> <input type="text" id="name" name="name" required /> <br />
+	<label for="email">Old E-mail *</label><br /> <input type="email" id="email" name="email" required /> <br />
+	<label for="email">New E-mail</label><br /> <input type="email" id="newemail" name="newemail" /> <br />
 	<label>Display E-mail?</label><br />
-	<input type="radio" id="dispemailyes" name="dispemail" value="yes" checked="checked" /> Yes
-	<input type="radio" id="dispemailno" name="dispemail" value="no" /> No<br />
-	<label>New Website?</label><br /> <input type="url" id="newurl" name="newurl" placeholder="http://" /> <br />
-	<label>Country *</label><br /> <select name="country" id="country" required><option value="null">Please select a country:</option><?php get_countries("null"); ?></select> <br />
+	<input type="radio" id="dispemailyes" name="dispemail" value="yes" checked="checked" /> <label for="dispemailyes">Yes</label>
+	<input type="radio" id="dispemailno" name="dispemail" value="no" /> <label for="dispemailno">No</label><br />
+	<label for="url">New Website?</label><br /> <input type="url" id="newurl" name="newurl" placeholder="http://" /> <br />
+	<label for="country">Country *</label><br /> <select name="country" id="country" required><option value="null">Please select a country:</option><?php get_countries("null"); ?></select> <br />
 <?php
 	if (isset($favefield) && $favefield == "yes") {
 ?>
-	<label><?php echo $favetext; ?></label><br /> <input type="text" id="newfave" name="newfave"  value="<?php get_data("newfave"); ?>" /> <br />
+	<label for="newfave"><?php echo $favetext; ?></label><br /> <input type="text" id="newfave" name="newfave"  value="<?php get_data("newfave"); ?>" /> <br />
 <?php
 	}
 	if (isset($captcha) && $captcha == "yes") {
 ?>
 	<img src="captcha.php" alt="" /><br />
-	<label>Captcha</label><br /> <input type="text" name="captcha" id="captcha" /> <br />
+	<label for="captcha">Captcha</label><br /> <input type="text" name="captcha" id="captcha" /> <br />
 <?php
 	}
 ?>
-	<label>Comments</label><br />
+	<label for="comments">Comments</label><br />
 	<textarea name="comments" id="comments" rows="3" cols="25"></textarea><br />
 	<input type="submit" name="submit" id="submit" value="Update" />
 </p></form>

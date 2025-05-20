@@ -249,16 +249,16 @@ if (isset($_COOKIE['bellabuffs'])) {
 					<form action="?ap=edit_process" method="post"><p>
 					<input type="hidden" id="member" name="member" value="<?php echo $mem;?>" />
 					<input type="hidden" id="file" name="file" value="<?php echo $file;?>" />
-					<label><input type="text" id="name" name="name" value="<?php echo $memary['0'];?>" /> Name</label><br />
-					<label><input type="text" id="email" name="email" value="<?php echo fixEmail($memary['1']);?>" /> E-mail</label><br />
-					<label><input type="radio" id="dispemailyes" name="dispemail" value="yes" <?php if ($memary['2'] == "yes") { echo "checked=\"checked\""; } ?> /> Yes</label>
-					<label><input type="radio" id="dispemailno" name="dispemail" value="no" <?php if ($memary['2'] == "no") { echo "checked=\"checked\""; } ?> /> No</label> Display E-mail?<br />
-					<label><input type="url" id="url" name="url" value="<?php echo $memary['3'];?>" /> Website</label><br />
-					<label><select name="country" id="country"><?php get_countries($memary['4']); ?></select> Country</label><br />
+					<label for="name"><input type="text" id="name" name="name" value="<?php echo $memary['0'];?>" /> Name</label><br />
+					<label for="email"><input type="text" id="email" name="email" value="<?php echo fixEmail($memary['1']);?>" /> E-mail</label><br />
+					<label for="dispemailyes"><input type="radio" id="dispemailyes" name="dispemail" value="yes" <?php if ($memary['2'] == "yes") { echo "checked=\"checked\""; } ?> /> Yes</label>
+					<label for="dispemailno"><input type="radio" id="dispemailno" name="dispemail" value="no" <?php if ($memary['2'] == "no") { echo "checked=\"checked\""; } ?> /> No</label> Display E-mail?<br />
+					<label for="url"><input type="url" id="url" name="url" value="<?php echo $memary['3'];?>" /> Website</label><br />
+					<label for="country"><select name="country" id="country"><?php get_countries($memary['4']); ?></select> Country</label><br />
 <?php
 					if (isset($favefield) && $favefield == "yes") {
 ?>
-						<label><input type="text" id="fave" name="fave" value="<?php echo $memary['5'];?>" /> <?php echo $favetext; ?></label><br />
+						<label for="fave"><input type="text" id="fave" name="fave" value="<?php echo $memary['5'];?>" /> <?php echo $favetext; ?></label><br />
 <?php
 					}
 ?>
@@ -324,7 +324,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 			case "add_spamword":
 				echo "<p>These words will be blocked - if the script finds them in the join form, membership will be rejected. Add each new word separately: do <strong>not</strong> use commas to separate spam words.</p>";
 				echo "<form action='admin.php?ap=add_spamword_process' method='post'><p>\n";
-				echo "<label for='newspamword'>Spam Word: </label><input type='text' name='spamword' id='spamword' /> <br />\n";
+				echo "<label for='spamword'>Spam Word: </label><input type='text' name='spamword' id='spamword' /> <br />\n";
 				echo "<br /><input type='submit' name='submit' id='submit' value='Submit' />\n";
 				echo "</p></form>\n";
 
@@ -455,13 +455,13 @@ if (isset($_COOKIE['bellabuffs'])) {
 				echo "<p style='color: red;'><strong>Note:</strong> On the majority of hosts, the button folders have to have permissions set to 777 for this upload feature to work. This can constitute a security risk. Please be careful when changing the permissions of files and folders.</p>";
 ?>
 				<form method="post" action="?ap=add_button_process" enctype="multipart/form-data"><p>
-				<label><input type="file" name="file" id="file" /> Upload Button</label><br />
+				<label for="file"><input type="file" name="file" id="file" /> Upload Button</label><br />
 				<label>Donated?</label><br />
-				<input type="radio" id="donatedyes" name="donated" value="yes" /> Yes
-				<input type="radio" id="donatedno" name="donated" value="no" checked="checked" /> No<br />
+				<input type="radio" id="donatedyes" name="donated" value="yes" /> <label for="donatedyes">Yes</label>
+				<input type="radio" id="donatedno" name="donated" value="no" checked="checked" /> <label for="donatedno">No</label><br />
 
-				<label><input type="text" id="donatorname" name="donatorname" /> Donator Name</label><br />
-				<label><input type="text" id="donatorurl" name="donatorurl" /> Donator URL</label><br />
+				<label for="donatorname"><input type="text" id="donatorname" name="donatorname" /> Donator Name</label><br />
+				<label for="donatorurl"><input type="text" id="donatorurl" name="donatorurl" /> Donator URL</label><br />
 				<input type="submit" name="submit" id="submit" value="Upload" />
 				</p></form>
 <?php
@@ -609,11 +609,11 @@ if (isset($_COOKIE['bellabuffs'])) {
 							<input type="hidden" id="width" name="width" value="<?php echo $buttonArray['1']; ?>" />
 							<input type="hidden" id="height" name="height" value="<?php echo $buttonArray['2']; ?>" />
 							<img src="buttons/<?php echo $buttonArray['0'];?>" style="vertical-align: middle;" alt="" /> Old Button<br />
-							<label><input type="file" name="newbutton" id="newbutton" /> New Button</label><br />
-							<label><input type="radio" id="donatedyes" name="donated" value="yes" <?php if (isset($buttonArray['3']) && $buttonArray['3'] == "yes") { echo "checked=\"checked\""; } ?> /> Yes</label>
-							<label><input type="radio" id="donatedno" name="donated" value="no" <?php if (isset($buttonArray['3']) && $buttonArray['3'] == "no") { echo "checked=\"checked\""; } ?> /> No</label> Donated?<br />
-							<label><input type="text" id="donatorname" name="donatorname" value="<?php echo $buttonArray['4'];?>" /> Donator Name</label><br />
-							<label><input type="text" id="donatorurl" name="donatorurl" value="<?php echo $buttonArray['5'];?>" /> Donator URL</label><br />
+							<label for="newbutton"><input type="file" name="newbutton" id="newbutton" /> New Button</label><br />
+							<label for="donatedyes"><input type="radio" id="donatedyes" name="donated" value="yes" <?php if (isset($buttonArray['3']) && $buttonArray['3'] == "yes") { echo "checked=\"checked\""; } ?> /> Yes</label>
+							<label for="donatedno"><input type="radio" id="donatedno" name="donated" value="no" <?php if (isset($buttonArray['3']) && $buttonArray['3'] == "no") { echo "checked=\"checked\""; } ?> /> No</label> Donated?<br />
+							<label for="donatorname"><input type="text" id="donatorname" name="donatorname" value="<?php echo $buttonArray['4'];?>" /> Donator Name</label><br />
+							<label for="donatorurl"><input type="text" id="donatorurl" name="donatorurl" value="<?php echo $buttonArray['5'];?>" /> Donator URL</label><br />
 							<input type="submit" name="submit" id="submit" value="Edit" />
 						</p></form>
 <?php
@@ -705,8 +705,8 @@ if (isset($_COOKIE['bellabuffs'])) {
 				<p>If updates details is left blank, only a date will be shown.</p>
 
 				<form action="admin.php?ap=update_process" method="post"><p>
-				<label><input type="text" name="date" id="date" value="<?php echo date($timestamp); ?>" readonly="readonly" /> Date</label><br />
-				<label><textarea id="updatedetails" name="updatedetails"></textarea> Details</label><br />
+				<label for="date"><input type="text" name="date" id="date" value="<?php echo date($timestamp); ?>" readonly="readonly" /> Date</label><br />
+				<label for="updatedetails"><textarea id="updatedetails" name="updatedetails"></textarea> Details</label><br />
 				<input type="submit" id="submit"  value="Update" />
 				</p></form>
 <?php
@@ -729,11 +729,11 @@ if (isset($_COOKIE['bellabuffs'])) {
 				echo "<p style='color: red;'><strong>Note:</strong> On the majority of hosts, the button folders have to have permissions set to 777 for the upload feature to work. This can constitute a security risk. Please be careful when changing the permissions of files and folders.</p>";
 ?>
 				<form method="post" action="?ap=add_affiliate_process" enctype="multipart/form-data"><p>
-				<label><input type="text" name="affName" id="affName" /> Affiliate Name</label><br />
-				<label><input type="email" name="affEmail" id="affEmail" /> Affiliate E-mail</label><br />
-				<label><input type="text" name="affURL" id="affURL" /> Affiliate URL</label><br />
-				<label><input type="text" name="affSitename" id="affSitename" /> Affiliate Site Name</label><br />
-				<label><input type="file" name="affButton" id="affButton" /> Affiliate Button</label><br />
+				<label for="affName"><input type="text" name="affName" id="affName" /> Affiliate Name</label><br />
+				<label for="affEmail"><input type="email" name="affEmail" id="affEmail" /> Affiliate E-mail</label><br />
+				<label for="affURL"><input type="text" name="affURL" id="affURL" /> Affiliate URL</label><br />
+				<label for="affSitename"><input type="text" name="affSitename" id="affSitename" /> Affiliate Site Name</label><br />
+				<label for="affButton"><input type="file" name="affButton" id="affButton" /> Affiliate Button</label><br />
 				<input type="submit" name="submit" id="submit" value="Upload" />
 				</p></form>
 <?php
@@ -843,11 +843,11 @@ if (isset($_COOKIE['bellabuffs'])) {
 							<input type="hidden" id="affnum" name="affnum" value="<?php echo $aff; ?>" />
 							<input type="hidden" id="filename" name="filename" value="<?php echo $affArray['0']; ?>" />
 							<img src="buttons/<?php echo $affArray['0'];?>" style="vertical-align: middle;" alt="" /> Old Affiliate Button<br />
-							<label><input type="file" name="newbutton" id="newbutton" /> New Affiliate Button</label><br />
-							<label><input type="text" name="affName" id="affName" value="<?php echo $affArray['1'];?>" /> Affiliate Name</label><br />
-							<label><input type="email" name="affEmail" id="affEmail" value="<?php echo fixEmail($affArray['2']);?>" /> Affiliate E-mail</label><br />
-							<label><input type="text" name="affURL" id="affURL" value="<?php echo $affArray['3'];?>" /> Affiliate URL</label><br />
-							<label><input type="text" name="affSitename" id="affSitename" value="<?php echo $affArray['4'];?>" /> Affiliate Site Name</label><br />
+							<label for="newbutton"><input type="file" name="newbutton" id="newbutton" /> New Affiliate Button</label><br />
+							<label for="affName"><input type="text" name="affName" id="affName" value="<?php echo $affArray['1'];?>" /> Affiliate Name</label><br />
+							<label for="affEmail"><input type="email" name="affEmail" id="affEmail" value="<?php echo fixEmail($affArray['2']);?>" /> Affiliate E-mail</label><br />
+							<label for="affURL"><input type="text" name="affURL" id="affURL" value="<?php echo $affArray['3'];?>" /> Affiliate URL</label><br />
+							<label for="affSitename"><input type="text" name="affSitename" id="affSitename" value="<?php echo $affArray['4'];?>" /> Affiliate Site Name</label><br />
 							<input type="submit" name="submit" id="submit" value="Edit" />
 						</p></form>
 <?php
@@ -958,7 +958,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 				$array = file(AFFILIATES);
 ?>
 				<form action="admin.php?ap=email_affiliates&amp;p=process" method="post"><p>
-				<label><textarea name="to" id="to" style='width: 350px; height: 80px; vertical-align: middle;'>
+				<label for="to"><textarea name="to" id="to" style='width: 350px; height: 80px; vertical-align: middle;'>
 <?php
 				$emailArray = array();
 
@@ -975,7 +975,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 				}
 ?>
 				</textarea> To</label><br />
-				<label><textarea name="message" id="message" style='width: 350px; height: 220px; vertical-align: middle;'></textarea> Message</label><br />
+				<label for="message"><textarea name="message" id="message" style='width: 350px; height: 220px; vertical-align: middle;'></textarea> Message</label><br />
 				<input type="submit" id="submit" name="submit" value="send" />
 				</p></form>
 <?php
@@ -1039,7 +1039,7 @@ if (isset($_COOKIE['bellabuffs'])) {
 ?>
 				<p>Search for member by e-mail address:</p>
 				<form action="admin.php?ap=search&amp;p=process" method="post"><p>
-				<label><input type="email" name="email" id="email" /> E-mail</label><br />
+				<label for="email"><input type="email" name="email" id="email" /> E-mail</label><br />
 				<input type="submit" name="submit" id="submit" value="Search" />
 				</form>
 <?php
@@ -1090,8 +1090,8 @@ if (isset($_GET['p']) && $_GET['p'] == "login") {
 		echo "<p>Sorry, that username and password combination does not match. Please try again.</p>";
 ?>
 		<form action="admin.php?p=login" method="post"><fieldset>
-		<label><input type="text" name="name" id="name" /> Name</label><br />
-		<label><input type="password" name="pass" id="pass" /> Password</label><br />
+		<label for="name"><input type="text" name="name" id="name" /> Name</label><br />
+		<label for="pass"><input type="password" name="pass" id="pass" /> Password</label><br />
 		<input type="submit" id="submit"  value="Login" />
 		</fieldset></form>
 <?php
@@ -1105,8 +1105,8 @@ if (isset($_GET['p']) && $_GET['p'] == "login") {
 		echo "<p>Sorry, you could not be logged in at this time. Please try again.</p>";
 ?>
 		<form action="admin.php?p=login" method="post"><fieldset>
-		<label><input type="text" name="name" id="name" /> Name</label><br />
-		<label><input type="password" name="pass" id="pass" /> Password</label><br />
+		<label for="name"><input type="text" name="name" id="name" /> Name</label><br />
+		<label for="pass"><input type="password" name="pass" id="pass" /> Password</label><br />
 		<input type="submit" id="submit"  value="Login" />
 		</fieldset></form>
 <?php
@@ -1119,8 +1119,8 @@ include('header.php');
 ?>
 
 <form action="admin.php?p=login" method="post"><p>
-<label><input type="text" name="name" id="name" /> Name</label><br />
-<label><input type="password" name="pass" id="pass" /> Password</label><br />
+<label for="name"><input type="text" name="name" id="name" /> Name</label><br />
+<label name="pass"><input type="password" name="pass" id="pass" /> Password</label><br />
 <input type="submit" id="submit"  value="Login" />
 </p></form>
 

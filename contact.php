@@ -126,15 +126,15 @@ if ($result != NULL)
 	<label for="email">E-mail *</label><br /> <input type="email" id="email" name="email" value="<?php get_data("email"); ?>" required /> <br />
 	<label for="url">Website</label><br /> <input type="url" id="url" name="url" placeholder="http://" /> <br />
 	<label for="reason">Reason for contact</label><br /> <select name="reason" id="reason">
-								<option value="affiliate-request">Affiliate Request</option>
-								<option value="couldnt-join">Joining Problem</option>
-								<option value="button-donation">Button Donation</option>
-								<option value="other">Other</option>
+        <option value="affiliate-request">Affiliate Request</option>
+        <option value="couldnt-join">Joining Problem</option>
+        <option value="button-donation">Button Donation</option>
+        <option value="other">Other</option>
 	</select> <br />
     <?php
         if (isset($securityField) && $securityField == "yes") {
     ?>
-    <label><?php echo $securityQ; ?> *</label><br /> <input type="text" id="security" name="security" value="<?php get_data("security"); ?>" required /> <br />
+    <label for="security"><?php echo $securityQ; ?> *</label><br /> <input type="text" id="security" name="security" value="<?php get_data("security"); ?>" required /> <br />
     <?php
         }
     ?>

@@ -199,32 +199,32 @@ if (!isset($_POST['submit']) || $show_form == true) {
 ?>
 
 <form action="join.php" method="post"><p>
-	<label>Name *</label><br /> <input type="text" id="name" name="name" value="<?php get_data("name"); ?>" required /> <br />
-	<label>E-mail *</label><br /> <input type="email" id="email" name="email" value="<?php get_data("email"); ?>" required /> <br />
+	<label for="name">Name *</label><br /> <input type="text" id="name" name="name" value="<?php get_data("name"); ?>" required /> <br />
+	<label for="email">E-mail *</label><br /> <input type="email" id="email" name="email" value="<?php get_data("email"); ?>" required /> <br />
 	<label>Display E-mail?</label><br />
-	<input type="radio" id="dispemailyes" name="dispemail" value="yes" checked="checked" /> Yes
-	<input type="radio" id="dispemailno" name="dispemail" value="no" /> No<br />
-	<label>Website</label><br /> <input type="url" id="url" name="url" placeholder="https://" value="<?php get_data("url"); ?>" /> <br />
-	<label>Country *</label><br /> <select name="country" id="country" required><option value="null">Please select a country:</option><?php get_countries($country); ?></select> <br />
+	<input type="radio" id="dispemailyes" name="dispemail" value="yes" checked="checked" /> <label for="dispemailyes">Yes</label>
+	<input type="radio" id="dispemailno" name="dispemail" value="no" /> <label for="dispemailno">No</label><br />
+	<label for="url">Website</label><br /> <input type="url" id="url" name="url" placeholder="https://" value="<?php get_data("url"); ?>" /> <br />
+	<label for="country">Country *</label><br /> <select name="country" id="country" required><option value="null">Please select a country:</option><?php get_countries($country); ?></select> <br />
 <?php
 	if (isset($favefield) && $favefield == "yes") {
 ?>
-	<label><?php echo $favetext; ?></label><br /> <input type="text" id="fave" name="fave"  value="<?php get_data("fave"); ?>" /> <br />
+	<label for="fave"><?php echo $favetext; ?></label><br /> <input type="text" id="fave" name="fave"  value="<?php get_data("fave"); ?>" /> <br />
 <?php
 	}
     if (isset($securityField) && $securityField == "yes") {
 ?>
-	<label><?php echo $securityQ; ?> *</label><br /> <input type="text" id="security" name="security" value="<?php get_data("security"); ?>" required /> <br />
+	<label for="security"><?php echo $securityQ; ?> *</label><br /> <input type="text" id="security" name="security" value="<?php get_data("security"); ?>" required /> <br />
 <?php
 	}
 	if (isset($captcha) && $captcha == "yes") {
 ?>
 	<img src="captcha.php" alt="" /><br />
-	<label>Captcha</label><br /> <input type="text" name="captcha" id="captcha" /> <br />
+	<label for="captcha">Captcha</label><br /> <input type="text" name="captcha" id="captcha" /> <br />
 <?php
 	}
 ?>
-	<label>Comments</label><br /> <textarea id="comments" name="comments" rows="3" cols="25"><?php get_data("comments"); ?></textarea><br />
+	<label for="comments">Comments</label><br /> <textarea id="comments" name="comments" rows="3" cols="25"><?php get_data("comments"); ?></textarea><br />
 	<input type="submit" name="submit" id="submit" value="Join" />
 </p></form>
 
