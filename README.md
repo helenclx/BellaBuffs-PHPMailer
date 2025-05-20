@@ -20,6 +20,7 @@ This BellaBuffs fork has been tested with PHP 8.2 on InfinityFree's free hosting
 * Add a buttons folder (with a placeholder file to enable the folder to be pushed via Git), so users do not need to manually create the folder to store uploaded buttons.
 * Allows fanlisting members to change their favourites with the update form if the favourites field is enabled.
 * Check for `https://` in addition to `http://` for potential spam in the comment fields.
+* Add the option to enable a security question field on the join and contact forms to improve anti-spam measures.
 
 ## Usage Instructions
 1. Download the [latest release of BellaBuffs-PHPMailer](https://github.com/helenclx/BellaBuffs-PHPMailer/releases/latest) from the GitHub repository, then extract the archive.
