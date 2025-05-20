@@ -28,6 +28,9 @@ $approvalMsg = "You've been approved at the fanlisting: $title with the followin
 
 // GENERAL SETTINGS
 $perpage = 30;   // number of members per page
+$securityField = "no"; // (yes or no) enable security question on join and contact forms
+$securityQ = "3 plus 5 equals to?"; // security question on join and contact forms
+$securityA = "8"; // answer to the secutiy quesiton on join and contact forms. this is case insensitive.
 $captcha = "no";   // (yes or no) enable captcha on join form?
 $favefield = "no";   // (yes or no) have a favourite field? yes or no
 $favetext = "Your favourite .. ?";   // the text to display next to the fave field

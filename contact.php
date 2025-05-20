@@ -53,6 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		$error_msg .= "The e-mail field is required, and must be a valid e-mail address.\r\n";
 	if (!empty($_POST['url']) && !preg_match('/^(http|https):\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(:(\d+))?\/?/i', $_POST['url']))
 		$error_msg .= "Invalid website url.\r\n";
+    if ((cleanUp($_POST['security']) != "") && (cleanUp($_POST['security']) != trim(strtolower($securityA))))
+		$error_msg .= "You did not answer the security question correctly! \r\n";
 
 	if ($error_msg == NULL && $points <= $maxPoints) {
 		$mail = new \PHPMailer\PHPMailer\PHPMailer(true);
@@ -101,6 +103,11 @@ include_once('header.php');
 ?>
 <h1>Contact Admin</h1>
 <p>This form is for contacting the fanlisting owner only -- it is not to be used to join the fanlisting unless you have been directed to do so. (Name, e-mail and comments are required fields.)</p>
+<?php
+    if (isset($securityField) && $securityField == "yes") {
+        echo "<p>You also need to answer a security question before you submit the contact form.</p>";
+    }
+?>
 
 <?php
 if ($error_msg != NULL)
@@ -124,6 +131,13 @@ if ($result != NULL)
 								<option value="button-donation">Button Donation</option>
 								<option value="other">Other</option>
 	</select> <br />
+    <?php
+        if (isset($securityField) && $securityField == "yes") {
+    ?>
+    <label><?php echo $securityQ; ?> *</label><br /> <input type="text" id="security" name="security" value="<?php get_data("security"); ?>" required /> <br />
+    <?php
+        }
+    ?>
 	<label for="comments">Comments *</label><br /> <textarea name="comments" id="comments" rows="3" cols="25" required><?php get_data("comments"); ?></textarea><br />
 </p>
 <p>

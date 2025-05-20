@@ -82,6 +82,8 @@ if (isset($_POST['submit'])) {
 		$error_msg .= "The website url you provided is not valid. Please remove and try again or fix the URL.\r\n";
 	if ($clean['country'] == "null" || (filesize(COUNTRIES) > 0 && checkTXTfile(COUNTRIES, $clean['country'], "country") === false))
 		$error_msg .= "Please select a valid country. \r\n";
+    if (($clean['security'] != "") && ($clean['security'] != trim(strtolower($securityA))))
+		$error_msg .= "You did not answer the security question correctly! \r\n";
 
 	if (filesize(IPBLOCKLST) > 0 && checkTXTfile(IPBLOCKLST, $_SERVER['REMOTE_ADDR'], "ip") === true) {
 		echo "<p>Your IP is in the block list, that means you're not allowed to join at this time. \r\n</p>";
@@ -182,6 +184,11 @@ if (!isset($_POST['submit']) || $show_form == true) {
 <p>To join the fanlisting, fill in your details below. Please do not use this form to update; use the <a href="update.php">update form</a> instead.</p>
 
 <p>(Name, E-mail and Country are required fields.)</p>
+<?php
+    if (isset($securityField) && $securityField == "yes") {
+        echo "<p>You also need to answer a security question before you submit this form.</p>";
+    }
+?>
 
 <?php
 	if ($error_msg != NULL) {
@@ -203,6 +210,11 @@ if (!isset($_POST['submit']) || $show_form == true) {
 	if (isset($favefield) && $favefield == "yes") {
 ?>
 	<label><?php echo $favetext; ?></label><br /> <input type="text" id="fave" name="fave"  value="<?php get_data("fave"); ?>" /> <br />
+<?php
+	}
+    if (isset($securityField) && $securityField == "yes") {
+?>
+	<label><?php echo $securityQ; ?> *</label><br /> <input type="text" id="security" name="security" value="<?php get_data("security"); ?>" required /> <br />
 <?php
 	}
 	if (isset($captcha) && $captcha == "yes") {
