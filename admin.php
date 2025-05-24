@@ -301,9 +301,9 @@ if (isset($_COOKIE['bellabuffs'])) {
 				fclose($fp);
 
 				if ($file == "newbies.txt") {
-					echo "<p>Member edited. <a href='admin.php?ap=pending_members'>Edit more pending members?</a></p>";
+					echo "<p>Member edited. <a href='admin.php?ap=manage_members&s=newbies'>Edit more pending members?</a></p>";
 				} else {
-					echo "<p>Member edited. <a href='admin.php?ap=approved_members'>Edit more approved members?</a></p>";
+					echo "<p>Member edited. <a href='admin.php?ap=manage_members'>Edit more approved members?</a></p>";
 				}
 
 				if (isset($updateDate) && $updateDate == "yes") {
